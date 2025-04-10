@@ -1,1 +1,4 @@
-# Mezuniyet---AI
+Merhaba , ben Uraz Akdoğan . 
+
+
+    Bu proje 
