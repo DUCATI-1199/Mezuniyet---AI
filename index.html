@@ -1,31 +1,171 @@
-<!-- templates/index.html -->
 <!DOCTYPE html>
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
     <title>İklim Değişikliği</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
-<body>
-    <h1>İklim Değişikliği Nedir?</h1>
+<body class="light">
+    <button class="theme-toggle" onclick="toggleTheme()">🌗 Tema Değiştir</button>
 
-    <p>
-        İklim değişikliği, dünyanın hava olaylarında uzun süreli değişiklikler anlamına gelir.
-       
-    </p>
-    
-    <h2>İklim Değişikliğinin Nedenleri</h2>
-    <p> İklim değişikliklerinin çoğu, insanların çevreye verdiği zarar yüzünden oluşur.</p>
-    <p>
-        İklim değişikliğine neden olan başlıca faktörler şunlardır:
-    <ul>
-        <li>Fosil yakıtların kullanımı</li>
-        <li>Ağaç kesimi</li>
-        <li>Sanayi atıkları</li>
-        <li>Tarım uygulamaları</li>
-        <li>Atık yönetimi eksiklikleri</li>
-    </ul>
-    <p>
-        Hep birlikte doğayı koruyabilir, geri dönüşüm yapabilir, çevre dostu enerji kullanabiliriz.
-    </p>
+    <div class="container">
+        <h1>İklim Değişikliği Nedir?</h1>
+
+        <p>
+            İklim değişikliği, dünya genelinde uzun vadede meydana gelen sıcaklık, yağış ve hava koşullarındaki değişiklikleri ifade eder.
+            Bu değişiklikler doğal süreçlerin bir sonucu olabileceği gibi, özellikle son yüzyılda insan faaliyetleri nedeniyle hızlanmış ve daha belirgin hâle gelmiştir.
+            İşte 2000 - 2023 yılları arasında iklim değişikliğine neden olan bazı faktörler ve etkileri:
+        </p>
+
+        <h2>Orman Kaybı Verileri (Milyon Hektar)</h2>
+        <!-- Grafik Alanı -->
+        <canvas id="forestChart" width="600" height="300"></canvas>
+
+        <h2>İklim Değişikliğinin Nedenleri</h2>
+        <ul>
+            <li>Fosil yakıtların kullanımı</li>
+            <li>Ağaç kesimi</li>
+            <li>Sanayi atıkları</li>
+            <li>Tarım uygulamaları</li>
+            <li>Atık yönetimi eksiklikleri</li>
+        </ul>
+
+        <h2>İklim Değişikliğinin Çevreye Etkileri</h2>
+        <ul>
+            <li>Deniz seviyesinin yükselmesi</li>
+            <li>Kuraklık ve su kıtlığı</li>
+            <li>Şiddetli hava olayları (kasırgalar, sel vb.)</li>
+            <li>Biyoçeşitlilik kaybı</li>
+            <li>Tarım verimliliğinde azalma</li>
+            <li>Hayvan ve bitki türlerinin yok olması veya göç etmesi</li>
+        </ul>
+
+        <h2>Peki iklim değişikliğini engellemek için neler yapabiliriz?</h2>
+        <ul>
+            <li>Fosil yakıt kullanımını azaltmak</li>
+            <li>Yenilenebilir enerji kaynaklarına yönelmek</li>
+            <li>Enerji verimliliğini artırmak</li>
+            <li>Ağaç dikmek ve ormanları korumak</li>
+            <li>Atık yönetimini iyileştirmek</li>
+            <li>Su tasarrufu yapmak</li>
+            <li>Tarım uygulamalarını sürdürülebilir hale getirmek</li>
+            <li>İnsanları iklim değişikliği konusunda bilinçlendirmek</li>
+        </ul>
+
+        <p>
+            İklim değişikliği, sadece çevreyi değil, insan sağlığını, ekonomiyi ve sosyal yapıyı da etkileyen karmaşık bir sorundur.
+            Bu nedenle, iklim değişikliği ile mücadele etmek için bireylerden uluslararası kuruluşlara kadar herkesin üzerine düşen görevler vardır.
+        </p>
+
+        <h2>İklim Değişikliği Testi</h2>
+        <form id="climateTest" onsubmit="return calculateScore()">
+            <p><strong>Soru 1:</strong> İklim değişikliğine neden olan başlıca faktörlerden biri nedir?</p>
+            <input type="radio" id="q1a" name="q1" value="10"> Fosil yakıt kullanımı<br>
+            <input type="radio" id="q1b" name="q1" value="0"> Ağaç kesimi<br>
+            <input type="radio" id="q1c" name="q1" value="0"> Su kıtlığı<br>
+            
+            <p><strong>Soru 2:</strong> İklim değişikliğinin en önemli etkilerinden biri nedir?</p>
+            <input type="radio" id="q2a" name="q2" value="0"> Deniz seviyesinin yükselmesi<br>
+            <input type="radio" id="q2b" name="q2" value="10"> Kuraklık ve su kıtlığı<br>
+            <input type="radio" id="q2c" name="q2" value="0"> Şiddetli hava olayları<br>
+
+            <p><strong>Soru 3:</strong> Hangi enerji kaynağı iklim değişikliğine daha az katkı sağlar?</p>
+            <input type="radio" id="q3a" name="q3" value="0"> Fosil yakıtlar<br>
+            <input type="radio" id="q3b" name="q3" value="10"> Yenilenebilir enerji<br>
+            <input type="radio" id="q3c" name="q3" value="0"> Nükleer enerji<br>
+
+            <p><strong>Soru 4:</strong> Orman kaybı, iklim değişikliği ile hangi şekilde ilişkilidir?</p>
+            <input type="radio" id="q4a" name="q4" value="10"> Karbon emilimini azaltır<br>
+            <input type="radio" id="q4b" name="q4" value="0"> Karbon salınımını artırmaz<br>
+            <input type="radio" id="q4c" name="q4" value="0"> Su tasarrufunu artırır<br>
+
+            <p><strong>Soru 5:</strong> İklim değişikliği hangi süreçle hızlanmaktadır?</p>
+            <input type="radio" id="q5a" name="q5" value="0"> Buzul çağları<br>
+            <input type="radio" id="q5b" name="q5" value="10"> İnsan faaliyetleri<br>
+            <input type="radio" id="q5c" name="q5" value="0"> Güneş ışınları<br>
+
+            <!-- Diğer sorularınızı buraya ekleyebilirsiniz -->
+
+            <br><br>
+            <input type="submit" value="Testi Bitir">
+        </form>
+
+        <h3>Sonuç</h3>
+        <div id="result" style="display:none;">
+            <p id="score"></p>
+        </div>
+
+    </div>
+
+    <script>
+        // Tema Değiştirici
+        function toggleTheme() {
+            const body = document.body;
+            body.classList.toggle("light");
+            body.classList.toggle("dark");
+        }
+
+        // Orman Kaybı Grafiği
+        const ctx = document.getElementById('forestChart').getContext('2d');
+        const forestChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['2000', '2005', '2010', '2015', '2020', '2023'],
+                datasets: [{
+                    label: 'Orman Kaybı (Milyon Hektar)',
+                    data: [8.5, 10.2, 9.8, 11.1, 12.5, 13.7],
+                    backgroundColor: '#27ae60',
+                    borderColor: '#1e8449',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'Milyon Hektar'
+                        }
+                    },
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'Yıllar'
+                        }
+                    }
+                }
+            }
+        });
+
+        // Test Sonucu Hesaplama
+        function calculateScore() {
+            let score = 0;
+
+            // Soru 1
+            if (document.getElementById('q1a').checked) score += 20;
+
+            // Soru 2
+            if (document.getElementById('q2b').checked) score += 20;
+
+            // Soru 3
+            if (document.getElementById('q3b').checked) score += 20;
+
+            // Soru 4
+            if (document.getElementById('q4a').checked) score += 20;
+
+            // Soru 5
+            if (document.getElementById('q5b').checked) score += 20;
+
+            // Test Sonucu Gösterme
+            document.getElementById('result').style.display = 'block';
+            document.getElementById('score').innerText = `Toplam Puan: ${score} / 100`;
+
+            // Formu submit etmeyi engelle
+            return false;
+        }
+    </script>
 </body>
 </html>
